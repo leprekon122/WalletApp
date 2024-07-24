@@ -1,1 +1,2 @@
 gunicorn_config.py
+.env
