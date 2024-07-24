@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -26,6 +27,7 @@ class WalletData(models.Model):
     wallet_tag = models.ForeignKey(WalletTag, models.CASCADE)
     wallet_pre_tag = models.ForeignKey(PreTag, models.CASCADE)
     date = models.DateField(auto_now=True)
+    user = models.ForeignKey(User, models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'WalletData'

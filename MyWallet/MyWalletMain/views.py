@@ -5,6 +5,7 @@ from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletA
 from rest_framework.views import APIView
 from rest_framework import permissions
 
+from django.contrib.auth.models import User
 
 # Create your views here.
 def login_page(request):
@@ -27,23 +28,23 @@ class MainPage(APIView):
 
     @staticmethod
     def get(request):
-        data_set = DataSetMAinPage()
+        username = request.user
+        data_set = DataSetMAinPage(username=username)
         filter_by_increasing = request.GET.get('increase')
         filter_by_decreasing = request.GET.get('decrease')
         filter_by_increasing_price = request.GET.get('increase_price')
         filter_by_decreasing_price = request.GET.get('filter_by_decreasing_price')
         filter_by_tag_name = request.GET.get('filter_by_tag_name')
         filter_by_pre_tag_name = request.GET.get('filter_by_pre_tag_name')
-        print(data_set.data_set['sum'])
 
         if filter_by_pre_tag_name:
             """filtering by pre_tag"""
-            logic = DataSetMAinPage(pre_tag_name=filter_by_pre_tag_name)
+            logic = DataSetMAinPage(pre_tag_name=filter_by_pre_tag_name,username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.filter_by_pre_tag)
 
         if filter_by_tag_name:
             """filter by tag name """
-            logic = DataSetMAinPage(tag_name=filter_by_tag_name)
+            logic = DataSetMAinPage(tag_name=filter_by_tag_name, username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.filter_by_tag_name)
 
         if filter_by_decreasing_price:
@@ -66,7 +67,8 @@ class MainPage(APIView):
 
     @staticmethod
     def post(request):
-        data_set = DataSetMAinPage()
+        data_set = DataSetMAinPage(username=request.user)
+        username = request.user
         create_tag_btn = request.POST.get('create_tag_btn')
         create_pre_tag_btn = request.POST.get('create_pre_tag_btn')
         write_data = request.POST.get('write_data')
@@ -76,7 +78,7 @@ class MainPage(APIView):
             price = request.POST.get('price')
             select_tag = request.POST.get('select_tag')
             select_pre_tag = request.POST.get('select_pre_tag')
-            logic = CreateWalletArticles(price, select_tag, select_pre_tag).create_articles
+            logic = CreateWalletArticles(price, select_tag, select_pre_tag, username=request.user).create_articles
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         if create_tag_btn:
