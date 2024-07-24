@@ -1,0 +1,213 @@
+{%extends 'MyWalletMain/layout_main.html'%}
+
+{%block title%}My Wallet{%endblock%}
+
+{%block content%}
+<div class="container">
+    <div class="add_data_and_tags">
+        <div class="add_data_main">
+            <form method="post">
+                {%csrf_token%}
+                <div class="add_data">
+                    <div>
+                        <label for="price_input" class="text-light">write the price</label>
+                        <input class="form-control" type="text" placeholder="price" id="price_input" name="price">
+                    </div>
+                    <div class="chose_tag">
+                        <label for="tag_select" class="text-light">Chose Tag</label>
+                        <select class="form-control" id="tag_select" name="select_tag">
+                            <option></option>
+                            {%for el in tag%}
+                            <option>{{el.tag_name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+
+                    <div class="pre_tag">
+                        <label for="pretag_select" class="text-light">Chose Pre-tag</label>
+                        <select class="form-control" id="pretag_select" name="select_pre_tag">
+                            <option></option>
+                            {%for el in pre_tag%}
+                            <option>{{el.pre_tag_name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-success btn-write" type="submit" name="write_data" value="1">write</button>
+            </form>
+        </div>
+
+
+        <div class="create_tag">
+            <form method="post">
+                {%csrf_token%}
+                <label for="create_tag" class="text-light">create_tag</label>
+                <input class="form-control" type="text" placeholder="create_tag" name="create_tag" id="create_tag">
+                <br>
+                <br>
+                <button class="btn btn-success create_tag_btn" name="create_tag_btn" value="1">create</button>
+            </form>
+        </div>
+
+        <div class="create_pre_tag">
+            <form method="post">
+                {%csrf_token%}
+                <label for="create_pre_tag" class="text-light">create pre-tag</label>
+                <input class="form-control" type="text" placeholder="create_pre_tag" id="create_pre_tag"
+                       name="create_pre_tag">
+                <br>
+                <br>
+                <button class="btn btn-success create_pre_tag_btn" type="submit" name="create_pre_tag_btn" value="1">
+                    create
+                </button>
+            </form>
+        </div>
+    </div>
+    <br>
+
+
+    <div class="total_value">
+        <div class="alert alert-success" style="background-color: transparent; width: 20%;">
+            <p class="text-light">total value:<span> {{sum.price__sum}}</span></p>
+        </div>
+    </div>
+
+    <div class="wallet_data">
+        <table class="table table-dark table-bordered text-light table-hover" style="background-color: transparent">
+            <thead>
+            <tr>
+                <th scope="col">
+                    <div class="col_data">
+                        <div>
+                            <p>date</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="background-color: transparent; border: none;">
+                                filter by date
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <form method="get">
+                                    <button class="btn btn-success text-light "
+                                            style="background-color: transparent; font-size: 13px"
+                                            type="submit"
+                                            name="increase" value="increase">filter
+                                        by increasing date
+                                    </button>
+                                    <button class="btn btn-success text-light"
+                                            style="background-color: transparent; font-size: 13px" name="decrease"
+                                            value="decrease">filter
+                                        by decreasing date
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="col_data">
+                        <div class="col_data_text">
+                            <p>price</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="background-color: transparent; border: none;">
+                                filter by price
+                            </button>
+                            <div class="dropdown-menu text-light" aria-labelledby="dropdownMenuButton_1">
+                                <form method="get">
+                                    <button class="btn btn-success"
+                                            style="background-color: transparent; font-size: 13px"
+                                            name="increase_price" value="increase_price" type="submit">
+                                        filter by increasing price
+                                    </button>
+                                    <button class="btn btn-success"
+                                            style="background-color: transparent; font-size: 13px"
+                                            name="filter_by_decreasing_price" value="1">
+                                        filter by decreasing price
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="col_data">
+                        <div class="col_data_text">
+                            <p>tag</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_2"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="background-color: transparent; border: none;">
+                                filter by tag
+                            </button>
+                            <div class="dropdown-menu text-light" aria-labelledby="dropdownMenuButton_2">
+                                <form method="get">
+                                    {%for item in tag%}
+                                    <button class="btn btn-success"
+                                            style="background-color: transparent; font-size: 13px"
+                                            name="filter_by_tag_name" value="{{item.id}}">
+                                        {{item.tag_name}}
+                                    </button>
+                                    {%endfor%}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="col_data">
+                        <div class="col_data_text">
+                            <p>pre-tag</p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_2"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="background-color: transparent; border: none;">
+                                filter by pre-tag
+                            </button>
+                            <div class="dropdown-menu text-light" aria-labelledby="dropdownMenuButton_2">
+                                <form method="get">
+                                    {%for item in pre_tag%}
+                                    <button class="btn btn-success"
+                                            style="background-color: transparent; font-size: 13px"
+                                            name="filter_by_pre_tag_name" value="{{item.id}}">
+                                        {{item.pre_tag_name}}
+                                    </button>
+                                    {%endfor%}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {%for el in data%}
+            <tr>
+                <td>{{el.date}}</td>
+                <td>{{el.price}}</td>
+                {%for item in tag%}
+                {%if item.id == el.wallet_tag_id%}
+                <td>{{item.tag_name}}</td>
+                {%endif%}
+                {%endfor%}
+
+                {%for items in pre_tag%}
+                {%if items.id == el.wallet_pre_tag_id%}
+                <td>{{items.pre_tag_name}}</td>
+                {%endif%}
+                {%endfor%}
+            </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+{%endblock%}

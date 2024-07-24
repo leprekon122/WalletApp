@@ -1,0 +1,81 @@
+body {background-color: black}
+
+.add_data_and_tags {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+}
+
+.add_data_main{
+                border: 1px solid #fff;
+                padding: 1%;
+                width: 35%;
+
+}
+
+.add_data {
+           width: 100%;
+           display: flex;
+           flex-direction: row;
+           justify-content: space-between;
+           font-size: 8px;
+
+}
+
+.btn-write {
+            width: 100%;
+            background-color: transparent;
+}
+
+.create_tag {
+             border: 1px solid #fff;
+             padding: 1%;
+             width: 30%;
+             font-size: 8px;
+
+}
+
+.create_tag_btn {
+                 width: 100%;
+                 background-color: transparent;
+}
+
+.create_pre_tag {
+                border: 1px solid #fff;
+                padding: 1%;
+                width: 30%;
+                font-size: 8px;
+
+}
+
+.create_pre_tag_btn{
+                    width: 100%;
+                    background-color: transparent;
+}
+
+
+.col_data {
+           display:flex;
+           justify-content: space-between;
+           padding: 1%;
+           height: 5vh;
+}
+
+
+.col_data_text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 5vh;
+}
+
+.dropdown-menu {
+           background-color: black
+}
+
+.wallet_data {
+             height: 70vh;
+             overflow: auto;
+             font-size: 13px;
+}
+

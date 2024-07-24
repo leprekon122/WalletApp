@@ -1,0 +1,18 @@
+{% extends 'MyWalletMain/layout_login.html' %}
+
+{%block title%}MyWallet{%endblock%}
+
+{%block content%}
+<div class="container main_container">
+    <form method="post">
+        {%csrf_token%}
+        <div class="login_main">
+            <input class="form-control" type="text" name="username">
+            <input class="form-control" type="password" name="password">
+            <br>
+            <button class="btn btn-success btn-login" type="submit" name="cred_submit" value="1">Login</button>
+        </div>
+    </form>
+
+</div>
+{%endblock%}
