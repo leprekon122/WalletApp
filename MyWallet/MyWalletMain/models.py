@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class PreTag(models.Model):
     objects = None
     pre_tag_name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'PreTag'
@@ -15,6 +16,7 @@ class PreTag(models.Model):
 class WalletTag(models.Model):
     objects = None
     tag_name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'WalletTag'

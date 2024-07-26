@@ -10,12 +10,14 @@ class DataSetMAinPage:
         self.tag_name = tag_name
         self.pre_tag_name = pre_tag_name
         self.username = username
+        self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
+
 
     @property
     def data_set(self):
         """main_data set """
-        data = {'pre_tag': PreTag.objects.all().values(),
-                'tag': WalletTag.objects.all().values(),
+        data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
+                'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
                 'data': WalletData.objects.filter(user=self.username).values(),
                 'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
@@ -36,17 +38,17 @@ class DataSetMAinPage:
         """data_set after make increase price filter"""
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
-                'data': WalletData.objects.filter(self.username).values().order_by('-price'),
+                'data': WalletData.objects.filter(user=self.username).values().order_by('-price'),
                 'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
 
     @property
-    def filter_by_decreasing_price_price(self):
+    def filter_by_decreasing_price(self):
         """data_set after make decrease price filter"""
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
-                'data': WalletData.objects.all().values(user=self.username).order_by('price'),
+                'data': WalletData.objects.filter(user=self.username).values().order_by('price'),
                 'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
@@ -95,23 +97,25 @@ class DataSetMAinPage:
 class CreateTag:
     """class for creating tags"""
 
-    def __init__(self, tag_name):
+    def __init__(self, tag_name, username):
         self.tag_name = tag_name
+        self.username = username
 
     @property
     def create_tag(self):
-        WalletTag.objects.create(tag_name=self.tag_name)
+        WalletTag.objects.create(tag_name=self.tag_name, user=self.username)
 
 
 class CreatePreTag:
     """Create pre_tag logic class"""
 
-    def __init__(self, pre_tag):
+    def __init__(self, pre_tag, username=None):
         self.pre_tag = pre_tag
+        self.username = username
 
     @property
     def create_pre_tag(self):
-        PreTag.objects.create(pre_tag_name=self.pre_tag)
+        PreTag.objects.create(pre_tag_name=self.pre_tag, user=self.username)
 
 
 class CreateWalletArticles:

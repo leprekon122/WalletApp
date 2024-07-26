@@ -7,6 +7,7 @@ from rest_framework import permissions
 
 from django.contrib.auth.models import User
 
+
 # Create your views here.
 def login_page(request):
     """Login page logic"""
@@ -30,6 +31,7 @@ class MainPage(APIView):
     def get(request):
         username = request.user
         data_set = DataSetMAinPage(username=username)
+        print(data_set.data_set)
         filter_by_increasing = request.GET.get('increase')
         filter_by_decreasing = request.GET.get('decrease')
         filter_by_increasing_price = request.GET.get('increase_price')
@@ -39,7 +41,7 @@ class MainPage(APIView):
 
         if filter_by_pre_tag_name:
             """filtering by pre_tag"""
-            logic = DataSetMAinPage(pre_tag_name=filter_by_pre_tag_name,username=username)
+            logic = DataSetMAinPage(pre_tag_name=filter_by_pre_tag_name, username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.filter_by_pre_tag)
 
         if filter_by_tag_name:
@@ -49,7 +51,7 @@ class MainPage(APIView):
 
         if filter_by_decreasing_price:
             """logic for filter by decreasing price"""
-            return render(request, 'MyWalletMain/main_page.html', data_set.filter_by_decreasing_price_price)
+            return render(request, 'MyWalletMain/main_page.html', data_set.filter_by_decreasing_price)
 
         if filter_by_increasing_price:
             """logic for filter by increasing price"""
@@ -83,12 +85,12 @@ class MainPage(APIView):
 
         if create_tag_btn:
             """create new tag"""
-            logic = CreateTag(request.POST.get('create_tag')).create_tag
+            logic = CreateTag(request.POST.get('create_tag'), username=username).create_tag
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         if create_pre_tag_btn:
             """create_pre_tag"""
-            logic = CreatePreTag(pre_tag=request.POST.get('create_pre_tag')).create_pre_tag
+            logic = CreatePreTag(pre_tag=request.POST.get('create_pre_tag'), username=username).create_pre_tag
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
