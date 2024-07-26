@@ -14,7 +14,7 @@ def login_page(request):
     password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        data_set = DataSetMAinPage()
+        data_set = DataSetMAinPage(username=request.user)
         login(request, user)
         return render(request, "MyWalletMain/main_page.html", data_set.data_set)
 

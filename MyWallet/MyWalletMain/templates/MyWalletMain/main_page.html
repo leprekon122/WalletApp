@@ -9,7 +9,7 @@
             <form method="post">
                 {%csrf_token%}
                 <div class="add_data">
-                    <div>
+                    <div class="price_input">
                         <label for="price_input" class="text-light">write the price</label>
                         <input class="form-control" type="text" placeholder="price" id="price_input" name="price">
                     </div>
@@ -68,7 +68,7 @@
 
 
     <div class="total_value">
-        <div class="alert alert-success" style="background-color: transparent; width: 20%;">
+        <div class="alert alert-success" style="background-color: transparent;">
             <p class="text-light">total value:<span> {{sum.price__sum}}</span></p>
         </div>
     </div>

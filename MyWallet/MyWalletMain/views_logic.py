@@ -17,7 +17,7 @@ class DataSetMAinPage:
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(user=self.username).values(),
-                'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
 
@@ -27,7 +27,7 @@ class DataSetMAinPage:
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(user=self.username).values().order_by('-date'),
-                'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
 
@@ -37,7 +37,7 @@ class DataSetMAinPage:
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(self.username).values().order_by('-price'),
-                'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
 
@@ -47,7 +47,7 @@ class DataSetMAinPage:
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.all().values(user=self.username).order_by('price'),
-                'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                 }
         return data
 
@@ -59,14 +59,15 @@ class DataSetMAinPage:
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
                     'data': WalletData.objects.filter(wallet_tag_id=self.tag_name, user=self.username).values(),
-                    'sum': WalletData.objects.filter(wallet_tag_id=self.tag_name).values().aggregate(Sum('price'))
+                    'sum': WalletData.objects.filter(wallet_tag_id=self.tag_name,
+                                                     user=self.username).values().aggregate(Sum('price'))
                     }
             return data
         else:
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
                     'data': 'No_such_data',
-                    'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                    'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                     }
             return data
 
@@ -77,7 +78,8 @@ class DataSetMAinPage:
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
                     'data': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name, user=self.username).values(),
-                    'sum': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name).values().aggregate(
+                    'sum': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name,
+                                                     user=self.username).values().aggregate(
                         Sum('price'))
                     }
             return data
@@ -85,7 +87,7 @@ class DataSetMAinPage:
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
                     'data': 'No_such_data',
-                    'sum': WalletData.objects.all().values('price').aggregate(Sum('price'))
+                    'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                     }
             return data
 

@@ -79,3 +79,49 @@ body {background-color: black}
              font-size: 13px;
 }
 
+.total_value {
+              width: 20%;
+}
+
+@media screen and (max-width: 430px){
+    .add_data_and_tags {
+                        display: flex;
+                        flex-direction: column;
+
+    }
+
+    .add_data_main {
+               width: 100%;
+    }
+
+
+    .price_input {
+                  width: 30%;
+    }
+
+    .chose_tag {
+                width: 30%;
+    }
+
+   .create_tag {
+                width: 100%;
+   }
+
+
+   .pre_tag {
+             width: 30%;
+   }
+   .create_pre_tag {
+                    width: 100%;
+   }
+
+
+    .total_value{
+                 width:50%;
+    }
+
+    .wallet_data {
+                   height: 40vh;
+                   max-width: 400px;
+    }
+}
