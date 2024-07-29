@@ -1,6 +1,7 @@
 from .models import PreTag, WalletTag, WalletData
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class DataSetMAinPage:
@@ -11,15 +12,16 @@ class DataSetMAinPage:
         self.pre_tag_name = pre_tag_name
         self.username = username
         self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
-
+        self.month = datetime.now().strftime("%m").split('0')[1]
 
     @property
     def data_set(self):
         """main_data set """
         data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
                 'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
-                'data': WalletData.objects.filter(user=self.username).values(),
-                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
+                'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(),
+                'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
+                    'price').aggregate(Sum('price'))
                 }
         return data
 
@@ -28,8 +30,10 @@ class DataSetMAinPage:
         """data_set after make increase date filter"""
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
-                'data': WalletData.objects.filter(user=self.username).values().order_by('-date'),
-                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
+                'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
+                    '-date'),
+                'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
+                    'price').aggregate(Sum('price'))
                 }
         return data
 
@@ -38,8 +42,10 @@ class DataSetMAinPage:
         """data_set after make increase price filter"""
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
-                'data': WalletData.objects.filter(user=self.username).values().order_by('-price'),
-                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
+                'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
+                    '-price'),
+                'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
+                    'price').aggregate(Sum('price'))
                 }
         return data
 
@@ -48,8 +54,10 @@ class DataSetMAinPage:
         """data_set after make decrease price filter"""
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
-                'data': WalletData.objects.filter(user=self.username).values().order_by('price'),
-                'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
+                'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
+                    'price'),
+                'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
+                    'price').aggregate(Sum('price'))
                 }
         return data
 
@@ -57,12 +65,14 @@ class DataSetMAinPage:
     def filter_by_tag_name(self):
         """logic for filtering by tag_name"""
 
-        if (any([(self.tag_name != ''), (self.tag_name != None)])):
+        if (any([(self.tag_name != ''), (self.tag_name is not None)])):
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
-                    'data': WalletData.objects.filter(wallet_tag_id=self.tag_name, user=self.username).values(),
+                    'data': WalletData.objects.filter(wallet_tag_id=self.tag_name, user=self.username,
+                                                      date__icontains=self.month).values(),
                     'sum': WalletData.objects.filter(wallet_tag_id=self.tag_name,
-                                                     user=self.username).values().aggregate(Sum('price'))
+                                                     user=self.username, date__icontains=self.month).values().aggregate(
+                        Sum('price'))
                     }
             return data
         else:
@@ -76,12 +86,13 @@ class DataSetMAinPage:
     @property
     def filter_by_pre_tag(self):
         """filter_by pre_tag"""
-        if (any([(self.pre_tag_name != ''), (self.pre_tag_name != None)])):
+        if any([(self.pre_tag_name != ''), (self.pre_tag_name is not None)]):
             data = {'pre_tag': PreTag.objects.all().values(),
                     'tag': WalletTag.objects.all().values(),
-                    'data': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name, user=self.username).values(),
+                    'data': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name, user=self.username,
+                                                      date__icontains=self.month).values(),
                     'sum': WalletData.objects.filter(wallet_pre_tag_id=self.pre_tag_name,
-                                                     user=self.username).values().aggregate(
+                                                     user=self.username, date__icontains=self.month).values().aggregate(
                         Sum('price'))
                     }
             return data
@@ -92,6 +103,17 @@ class DataSetMAinPage:
                     'sum': WalletData.objects.filter(user=self.username).values('price').aggregate(Sum('price'))
                     }
             return data
+
+    @property
+    def show_all_data(self):
+        """filter for view all data"""
+        data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
+                'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
+                'data': WalletData.objects.filter(user=self.username).values(),
+                'sum': WalletData.objects.filter(user=self.username).values(
+                    'price').aggregate(Sum('price'))
+                }
+        return data
 
 
 class CreateTag:
@@ -104,6 +126,7 @@ class CreateTag:
     @property
     def create_tag(self):
         WalletTag.objects.create(tag_name=self.tag_name, user=self.username)
+        return True
 
 
 class CreatePreTag:
@@ -121,11 +144,12 @@ class CreatePreTag:
 class CreateWalletArticles:
     """class for creating data in main_page"""
 
-    def __init__(self, price, tag, pre_tag, username=None):
+    def __init__(self, price, tag, pre_tag, chose_date, username=None):
         self.price = price
         self.tag = tag
         self.pre_tag = pre_tag
         self.username = username
+        self.chose_date = chose_date
         self.tag_id = WalletTag.objects.filter(tag_name=self.tag).values()[0]["id"]
         self.pre_tag_id = PreTag.objects.filter(pre_tag_name=self.pre_tag).values()[0]['id']
 
@@ -133,4 +157,4 @@ class CreateWalletArticles:
     def create_articles(self):
         """create articles"""
         WalletData.objects.create(price=self.price, wallet_tag_id=self.tag_id, wallet_pre_tag_id=self.pre_tag_id,
-                                  user=self.username)
+                                  user=self.username, date=self.chose_date)

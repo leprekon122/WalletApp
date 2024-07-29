@@ -1,11 +1,11 @@
-from django.contrib.auth import authenticate
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+
+from .models import WalletData
 from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles
 from rest_framework.views import APIView
 from rest_framework import permissions
-
-from django.contrib.auth.models import User
+from datetime import datetime, date
 
 
 # Create your views here.
@@ -31,38 +31,36 @@ class MainPage(APIView):
     def get(request):
         username = request.user
         data_set = DataSetMAinPage(username=username)
-        print(data_set.data_set)
         filter_by_increasing = request.GET.get('increase')
         filter_by_decreasing = request.GET.get('decrease')
         filter_by_increasing_price = request.GET.get('increase_price')
         filter_by_decreasing_price = request.GET.get('filter_by_decreasing_price')
         filter_by_tag_name = request.GET.get('filter_by_tag_name')
         filter_by_pre_tag_name = request.GET.get('filter_by_pre_tag_name')
+        show_all = request.GET.get('show_all')
+
+        if show_all:
+            logic = DataSetMAinPage(username=username)
+            return render(request, 'MyWalletMain/main_page.html', logic.show_all_data)
 
         if filter_by_pre_tag_name:
-            """filtering by pre_tag"""
             logic = DataSetMAinPage(pre_tag_name=filter_by_pre_tag_name, username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.filter_by_pre_tag)
 
         if filter_by_tag_name:
-            """filter by tag name """
             logic = DataSetMAinPage(tag_name=filter_by_tag_name, username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.filter_by_tag_name)
 
         if filter_by_decreasing_price:
-            """logic for filter by decreasing price"""
             return render(request, 'MyWalletMain/main_page.html', data_set.filter_by_decreasing_price)
 
         if filter_by_increasing_price:
-            """logic for filter by increasing price"""
             return render(request, 'MyWalletMain/main_page.html', data_set.filter_by_increasing_price)
 
         if filter_by_increasing:
-            """filter by increasing date"""
             return render(request, 'MyWalletMain/main_page.html', data_set.filter_by_increasing_date)
 
         if filter_by_decreasing:
-            """filter by decreasing date"""
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
@@ -76,20 +74,19 @@ class MainPage(APIView):
         write_data = request.POST.get('write_data')
 
         if write_data:
-            """create new articles"""
             price = request.POST.get('price')
+            chose_date = request.POST.get('chose_date')
             select_tag = request.POST.get('select_tag')
             select_pre_tag = request.POST.get('select_pre_tag')
-            logic = CreateWalletArticles(price, select_tag, select_pre_tag, username=request.user).create_articles
+            logic = CreateWalletArticles(price, select_tag, select_pre_tag, chose_date=chose_date,
+                                         username=request.user).create_articles
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         if create_tag_btn:
-            """create new tag"""
             logic = CreateTag(request.POST.get('create_tag'), username=username).create_tag
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         if create_pre_tag_btn:
-            """create_pre_tag"""
             logic = CreatePreTag(pre_tag=request.POST.get('create_pre_tag'), username=username).create_pre_tag
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 

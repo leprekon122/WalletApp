@@ -32,6 +32,11 @@
                             {%endfor%}
                         </select>
                     </div>
+
+                    <div class="chose_date">
+                        <label for="chose_date" class="text-light">chose date</label>
+                        <input class="form-control" type="date" name="chose_date" id="chose_date">
+                    </div>
                 </div>
                 <br>
                 <button class="btn btn-success btn-write" type="submit" name="write_data" value="1">write</button>
@@ -66,10 +71,18 @@
     </div>
     <br>
 
-
-    <div class="total_value">
-        <div class="alert alert-success" style="background-color: transparent;">
-            <p class="text-light">total value:<span> {{sum.price__sum}}</span></p>
+    <div class="value_and_btn">
+        <div class="total_value">
+            <div class="alert alert-success" style="background-color: transparent;">
+                <p class="text-light">total value:<span> {{sum.price__sum}}</span></p>
+            </div>
+        </div>
+        <div class="all_data_btn">
+            <form method="get">
+                <button class="btn btn-danger" style="background-color: transparent" name="show_all"
+                        value="1" type="submit">show all
+                </button>
+            </form>
         </div>
     </div>
 

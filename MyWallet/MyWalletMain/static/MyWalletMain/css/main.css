@@ -17,6 +17,7 @@ body {background-color: black}
            width: 100%;
            display: flex;
            flex-direction: row;
+           flex-wrap: wrap;
            justify-content: space-between;
            font-size: 8px;
 
@@ -81,6 +82,21 @@ body {background-color: black}
 
 .total_value {
               width: 20%;
+}
+
+.value_and_btn {
+               display: flex;
+               flex-direction: row;
+               width: 100%;
+               justify-content: space-between;
+}
+
+.all_data_btn {
+               width: 50%;
+}
+
+.all_data_btn button {
+                      width: 100%;
 }
 
 @media screen and (max-width: 430px){
