@@ -203,24 +203,103 @@
             {%for el in data%}
             <tr>
                 <td>{{el.date}}</td>
-                <td>{{el.price}}</td>
+                <td>
+                    <div style="display: flex; justify-content: space-between">
+                        {{el.price}}
+
+                        <button class="btn btn-warning" style="background-color: transparent; border: none"
+                                data-target="#rewrite_price_modal_{{el.id}}" data-toggle="modal"><i
+                                class="fa-solid fa-pencil text-light"></i></button>
+
+
+                        <div class="modal" tabindex="-1" role="dialog" id="rewrite_price_modal_{{el.id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content text-light" style="background-color: black">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">rewrite price</h5>
+                                        <button type="button" class="close text-danger" data-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post">
+                                        {%csrf_token%}
+                                        <div class="modal-body">
+                                            <input class="form-control" type="text" placeholder="rewrite price"
+                                                   name="rewrite_price">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" name="rewrite_price_btn"
+                                                    value="{{el.id}}"
+                                                    style="background-color: transparent; width: 100%;">rewrite
+                                                price
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </td>
                 {%for item in tag%}
                 {%if item.id == el.wallet_tag_id%}
-                <td>{{item.tag_name}}</td>
-                {%endif%}
-                {%endfor%}
+                <td>
+                    <div style="display: flex; justify-content: space-between">
+                        {{item.tag_name}}
 
-                {%for items in pre_tag%}
-                {%if items.id == el.wallet_pre_tag_id%}
-                <td>{{items.pre_tag_name}}</td>
-                {%endif%}
-                {%endfor%}
-            </tr>
-            {%endfor%}
-            </tbody>
-        </table>
+                        <button class="btn btn-warning" style="background-color: transparent; border: none"
+                                data-target="#rewrite_tag_modal_{{el.id}}" data-toggle="modal"><i
+                                class="fa-solid fa-pencil text-light"></i></button>
+
+                        <div class="modal" tabindex="-1" role="dialog" id="rewrite_tag_modal_{{el.id}}">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content text-light" style="background-color: black">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">rewrite tag</h5>
+                                        <button type="button" class="close text-danger" data-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post">
+                                        {%csrf_token%}
+                                        <div class="modal-body">
+                                            <select class="form-control" name="rewrite_tag_select">
+                                                {%for data in tag%}
+                                                <option value="{{data.id}}">{{data.tag_name}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" name="rewrite_tag_btn"
+                                                    value="{{el.id}}"
+                                                    style="background-color: transparent; width: 100%;">rewrite
+                                                tag
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
     </div>
+    </td>
+    {%endif%}
+    {%endfor%}
 
-
+    {%for items in pre_tag%}
+    {%if items.id == el.wallet_pre_tag_id%}
+    <td>{{items.pre_tag_name}}</td>
+    {%endif%}
+    {%endfor%}
+    </tr>
+    {%endfor%}
+    </tbody>
+    </table>
+</div>
 </div>
 {%endblock%}

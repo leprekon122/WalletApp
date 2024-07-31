@@ -158,3 +158,28 @@ class CreateWalletArticles:
         """create articles"""
         WalletData.objects.create(price=self.price, wallet_tag_id=self.tag_id, wallet_pre_tag_id=self.pre_tag_id,
                                   user=self.username, date=self.chose_date)
+
+
+class RewriteData:
+    """class for rewriting data in WalletData model"""
+
+    def __init__(self, article_id, rew_price=None, rew_tag=None):
+        self.article_id = article_id
+        self.rew_price = rew_price
+        self.rew_tag = rew_tag
+
+    @property
+    def rewrite_price(self):
+        """rewrite price in WalletData"""
+        if self.rew_price is not '':
+            model = WalletData.objects.get(id=self.article_id)
+            model.price = self.rew_price
+            model.save()
+
+    @property
+    def rewrite_tag(self):
+        """rewrite tag in WalletData"""
+        if self.rew_tag is not '':
+            model = WalletData.objects.get(id=self.article_id)
+            model.wallet_tag_id = self.rew_tag
+            model.save()

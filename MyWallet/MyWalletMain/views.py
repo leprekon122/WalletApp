@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 
-from .models import WalletData
-from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles
+from .models import WalletData, WalletTag
+from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData
 from rest_framework.views import APIView
 from rest_framework import permissions
 from datetime import datetime, date
@@ -72,6 +72,19 @@ class MainPage(APIView):
         create_tag_btn = request.POST.get('create_tag_btn')
         create_pre_tag_btn = request.POST.get('create_pre_tag_btn')
         write_data = request.POST.get('write_data')
+        rewrite_price_btn = request.POST.get('rewrite_price_btn')
+        rewrite_tag_btn = request.POST.get('rewrite_tag_btn')
+
+        if rewrite_tag_btn:
+            tag_id = request.POST.get('rewrite_tag_select')
+            art_id = rewrite_tag_btn
+            logic = RewriteData(article_id=art_id, rew_tag=tag_id).rewrite_tag
+            return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
+
+        if rewrite_price_btn:
+            price = request.POST.get('rewrite_price')
+            logic = RewriteData(rewrite_price_btn, price).rewrite_price
+            return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         if write_data:
             price = request.POST.get('price')
