@@ -171,7 +171,7 @@ class RewriteData:
     @property
     def rewrite_price(self):
         """rewrite price in WalletData"""
-        if self.rew_price is not '':
+        if self.rew_price != '':
             model = WalletData.objects.get(id=self.article_id)
             model.price = self.rew_price
             model.save()
@@ -179,7 +179,7 @@ class RewriteData:
     @property
     def rewrite_tag(self):
         """rewrite tag in WalletData"""
-        if self.rew_tag is not '':
+        if self.rew_tag != '':
             model = WalletData.objects.get(id=self.article_id)
             model.wallet_tag_id = self.rew_tag
             model.save()
