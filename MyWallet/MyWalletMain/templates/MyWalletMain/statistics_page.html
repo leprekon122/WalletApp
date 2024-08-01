@@ -1,0 +1,31 @@
+{%extends 'MyWalletMain/layout_main.html'%}
+
+{%block title%}Statistics{%endblock%}
+
+{%block content%}
+<div class="container">
+    <div class="stat_period_main">
+        <div class="stat_input">
+            <div class="start_from">
+                <label for="start_from" class="text-light">start date</label>
+                <input type="date" class="form-control " id="start_from">
+            </div>
+            <div class="finish_to">
+                <label for="finish_date" class="text-light">finish date</label>
+                <input type="date" class="form-control" id="finish_date">
+            </div>
+            <br>
+            <button class="btn btn-success" style="background-color: transparent; width: 100%; border-radius: 5%">
+                build
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="stat_data">
+        {%for key, value in model.items %}
+        <p class="text-light">{{key}} - {{value}}</p>
+        {%endfor%}
+
+    </div>
+</div>
+{%endblock%}

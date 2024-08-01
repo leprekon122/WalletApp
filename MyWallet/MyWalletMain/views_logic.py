@@ -183,3 +183,21 @@ class RewriteData:
             model = WalletData.objects.get(id=self.article_id)
             model.wallet_tag_id = self.rew_tag
             model.save()
+
+
+class StatisticsLogic:
+    """class for statistics page logic"""
+
+    def __init__(self):
+        self.model = WalletTag.objects.all().values()
+        self.month = datetime.now().strftime("%m").split('0')[1]
+        self.price_data = {}
+
+    @property
+    def current_month_statistics(self):
+        """funmc for build total rezult for month """
+        for el in self.model:
+            test = WalletData.objects.filter(wallet_tag_id=el['id'], date__icontains=self.month).aggregate(
+                Sum('price'))
+            self.price_data[f"{el['tag_name']}"] = test['price__sum']
+        return self.price_data

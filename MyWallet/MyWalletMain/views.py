@@ -1,11 +1,13 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 
 from .models import WalletData, WalletTag
-from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData
+from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData, StatisticsLogic
 from rest_framework.views import APIView
 from rest_framework import permissions
-from datetime import datetime, date
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -104,3 +106,15 @@ class MainPage(APIView):
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
         return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
+
+
+class StatisticsPage(APIView):
+    """Logic for statistics page"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    @staticmethod
+    def get(request):
+        logic = StatisticsLogic().current_month_statistics
+        data = {'model': logic}
+
+        return render(request, "MyWalletMain/statistics_page.html", data)

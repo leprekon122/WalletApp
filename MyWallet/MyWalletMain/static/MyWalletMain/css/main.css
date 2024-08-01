@@ -99,6 +99,20 @@ body {background-color: black}
                       width: 100%;
 }
 
+.stat_input {
+             width: 30%;
+             padding: 1%;
+             border: 1px solid #fff;
+             border-radius: 5%;
+}
+
+.stat_data {
+            width: 30%;
+            padding: 1%;
+            border: 1px solid #fff;
+            border-radius: 5%;
+}
+
 @media screen and (max-width: 430px){
     .add_data_and_tags {
                         display: flex;
