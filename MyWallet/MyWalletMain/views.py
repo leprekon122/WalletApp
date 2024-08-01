@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
 from .models import WalletData, WalletTag
@@ -17,9 +17,10 @@ def login_page(request):
     password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        data_set = DataSetMAinPage(username=request.user)
+        #data_set = DataSetMAinPage(username=request.user)
         login(request, user)
-        return render(request, "MyWalletMain/main_page.html", data_set.data_set)
+        # return render(request, "MyWalletMain/main_page.html", data_set.data_set)
+        return redirect('main_page')
 
     return render(request, "MyWalletMain/login_page.html")
 
