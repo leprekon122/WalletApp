@@ -154,4 +154,20 @@ body {background-color: black}
                    height: 40vh;
                    max-width: 400px;
     }
+
+    .stat_data {
+                width: 100%;
+                padding: 1%;
+                border: 1px solid #fff;
+                border-radius: 5%;
+                max-height: 60vh;
+                overflow: auto;
+    }
+
+    .stat_input {
+                 width: 100%;
+                 padding: 1%;
+                 border: 1px solid #fff;
+                 border-radius: 5%;
+    }
 }

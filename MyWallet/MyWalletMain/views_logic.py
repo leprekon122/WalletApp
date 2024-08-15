@@ -185,19 +185,33 @@ class RewriteData:
             model.save()
 
 
+class DeleteArticles:
+    """class for delete logic in WalletData model"""
+
+    def __init__(self, art_id):
+        self.art_id = art_id
+
+    def delete_article(self):
+        """func for delete article"""
+        WalletData.objects.filter(id=self.art_id).delete()
+
+
 class StatisticsLogic:
     """class for statistics page logic"""
 
-    def __init__(self):
+    def __init__(self, username):
         self.model = WalletTag.objects.all().values()
         self.month = datetime.now().strftime("%m").split('0')[1]
         self.price_data = {}
+        self.username = username
+        self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
 
     @property
     def current_month_statistics(self):
         """funmc for build total rezult for month """
         for el in self.model:
-            test = WalletData.objects.filter(wallet_tag_id=el['id'], date__icontains=self.month).aggregate(
+            test = WalletData.objects.filter(wallet_tag_id=el['id'], date__icontains=self.month,
+                                             user=self.username).aggregate(
                 Sum('price'))
             self.price_data[f"{el['tag_name']}"] = test['price__sum']
         return self.price_data

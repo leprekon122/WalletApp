@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
 from .models import WalletData, WalletTag
-from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData, StatisticsLogic
+from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData, StatisticsLogic, \
+    DeleteArticles
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.db.models import Sum
@@ -17,7 +18,7 @@ def login_page(request):
     password = request.POST.get('password')
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        #data_set = DataSetMAinPage(username=request.user)
+        # data_set = DataSetMAinPage(username=request.user)
         login(request, user)
         # return render(request, "MyWalletMain/main_page.html", data_set.data_set)
         return redirect('main_page')
@@ -77,6 +78,7 @@ class MainPage(APIView):
         write_data = request.POST.get('write_data')
         rewrite_price_btn = request.POST.get('rewrite_price_btn')
         rewrite_tag_btn = request.POST.get('rewrite_tag_btn')
+        delete_article = request.POST.get('delete_article')
 
         if rewrite_tag_btn:
             tag_id = request.POST.get('rewrite_tag_select')
@@ -106,6 +108,10 @@ class MainPage(APIView):
             logic = CreatePreTag(pre_tag=request.POST.get('create_pre_tag'), username=username).create_pre_tag
             return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
+        if delete_article:
+            logic = DeleteArticles(art_id=delete_article).delete_article()
+            return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
+
         return render(request, 'MyWalletMain/main_page.html', data_set.data_set)
 
 
@@ -115,7 +121,7 @@ class StatisticsPage(APIView):
 
     @staticmethod
     def get(request):
-        logic = StatisticsLogic().current_month_statistics
+        username = request.user
+        logic = StatisticsLogic(username=username).current_month_statistics
         data = {'model': logic}
-
         return render(request, "MyWalletMain/statistics_page.html", data)
