@@ -12,7 +12,7 @@ class DataSetMAinPage:
         self.pre_tag_name = pre_tag_name
         self.username = username
         self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
-        self.month = datetime.now().strftime("%m").split('0')[1]
+        self.month = datetime.now().strftime("%Y-%m")
 
     @property
     def data_set(self):
@@ -201,7 +201,9 @@ class StatisticsLogic:
 
     def __init__(self, username):
         self.model = WalletTag.objects.all().values()
-        self.month = datetime.now().strftime("%m").split('0')[1]
+        self.month = datetime.now().strftime("%Y-%m")
+        # self.month_new = datetime.date(2024, datetime.datetime.month, 24).strftime("%Y-%m")
+
         self.price_data = {}
         self.username = username
         self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
