@@ -28,7 +28,7 @@
 
     <div class="stat_data">
         {%for key, value in model.items %}
-        {%if value != None%}
+        {%if value != None and value != 0%}
         <p class="text-light">{{key}} - {{value}}</p>
         {%endif%}
         {%endfor%}
