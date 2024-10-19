@@ -210,7 +210,7 @@ class StatisticsLogic:
 
     @property
     def current_month_statistics(self):
-        """funmc for build total rezult for month """
+        """func for build total rezult for month """
         for el in self.model:
             test = WalletData.objects.filter(wallet_tag_id=el['id'], date__icontains=self.month,
                                              user=self.username).aggregate(

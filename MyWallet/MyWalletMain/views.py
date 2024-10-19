@@ -1,5 +1,6 @@
-# import datetime
-from datetime import datetime
+import datetime
+# from datetime import datetime
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
@@ -9,6 +10,7 @@ from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletA
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.db.models import Sum
+from django.db.models import Q
 
 
 # Create your views here.
@@ -121,7 +123,50 @@ class StatisticsPage(APIView):
 
     @staticmethod
     def get(request):
+        build_order = request.GET.get('build_order')
         username = request.user
         logic = StatisticsLogic(username=username).current_month_statistics
-        data = {'model': logic}
+
+        if build_order:
+            '''create logic for period'''
+            tag_id_set = []
+            clean_data_set = {}
+            tag_id_model = WalletTag.objects.filter(
+                user=User.objects.filter(username=username).values()[0]['id']).values()
+            for el in (tag_id_model):
+                if el['tag_name'] not in tag_id_set:
+                    tag_id_set.append(el)
+                    clean_data_set[el['tag_name']] = 0
+
+            model_data = []
+            date_start = datetime.date(int(request.GET.get('date_start').split('-')[0]),
+                                       int(request.GET.get('date_start').split('-')[1]),
+                                       int(request.GET.get('date_start').split('-')[2]))
+            date_finish = datetime.date(int(request.GET.get('date_finish').split('-')[0]),
+                                        int(request.GET.get('date_finish').split('-')[1]),
+                                        int(request.GET.get('date_finish').split('-')[2]))
+            res = date_finish - date_start
+            date_pack = []
+            clean_data = {}
+            for el in range(1, res.days + 1):
+                dt = date_start + datetime.timedelta(days=el)
+                date_pack.append(dt)
+
+            for el in date_pack:
+                test = WalletData.objects.filter(user=username, date__icontains=el).values()
+                if len(test) != 0:
+                    model_data.append(test)
+
+            for item in tag_id_set:
+                for elem in model_data:
+                    if elem[0]['wallet_tag_id'] == item['id']:
+                        print(item['tag_name'], elem[0]['wallet_tag_id'], elem[0]['price'])
+                        clean_data_set[f"{item['tag_name']}"] += int(elem[0]['price'])
+            data = {'model': clean_data_set,
+                    'id': 1
+                    }
+            return render(request, "MyWalletMain/statistics_page.html", data)
+        data = {'model': logic,
+                'id': 0
+                }
         return render(request, "MyWalletMain/statistics_page.html", data)
