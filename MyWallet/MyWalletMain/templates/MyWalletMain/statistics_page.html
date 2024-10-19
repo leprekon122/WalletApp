@@ -36,7 +36,9 @@
     {%elif id == 1%}
     <div class="stat_data">
         {%for key, value in model.items%}
+        {%if value != None%}
         <p class="text-light">{{key}} - {{value}}</p>
+        {%endif%}
         {%endfor%}
     </div>
     {%endif%}
