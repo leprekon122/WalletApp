@@ -128,7 +128,7 @@ class StatisticsPage(APIView):
         logic = StatisticsLogic(username=username).current_month_statistics
 
         if build_order:
-            '''create logic for period'''
+
             tag_id_set = []
             clean_data_set = {}
             tag_id_model = WalletTag.objects.filter(
@@ -145,28 +145,10 @@ class StatisticsPage(APIView):
             date_finish = datetime.date(int(request.GET.get('date_finish').split('-')[0]),
                                         int(request.GET.get('date_finish').split('-')[1]),
                                         int(request.GET.get('date_finish').split('-')[2]))
-            res = date_finish - date_start
-            date_pack = []
-            clean_data = {}
-            for el in range(1, res.days + 1):
-                dt = date_start + datetime.timedelta(days=el)
-                date_pack.append(dt)
 
-            for el in date_pack:
-                test = WalletData.objects.filter(user=username, date__icontains=el).values()
-                if len(test) != 0:
-                    model_data.append(test)
+            logic = StatisticsLogic(username=username, date_start=date_start, date_finish=date_finish)
 
-            for item in tag_id_set:
-                for elem in model_data:
-                    if elem[0]['wallet_tag_id'] == item['id']:
-                        print(item['tag_name'], elem[0]['wallet_tag_id'], elem[0]['price'])
-                        clean_data_set[f"{item['tag_name']}"] += int(elem[0]['price'])
-            data = {'model': clean_data_set,
-                    'id': 1
-                    }
-            return render(request, "MyWalletMain/statistics_page.html", data)
-        data = {'model': logic,
-                'id': 0
-                }
+            return render(request, "MyWalletMain/statistics_page.html", logic.statistic_for_period_of_time)
+
+        data = {'model': logic}
         return render(request, "MyWalletMain/statistics_page.html", data)

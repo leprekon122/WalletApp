@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
+
 class DataSetMAinPage:
     """class for creating data set"""
 
@@ -199,9 +200,11 @@ class DeleteArticles:
 class StatisticsLogic:
     """class for statistics page logic"""
 
-    def __init__(self, username):
+    def __init__(self, username, date_start=None, date_finish=None):
         self.model = WalletTag.objects.all().values()
         self.month = datetime.now().strftime("%Y-%m")
+        self.date_start = date_start
+        self.date_finish = date_finish
         # self.month_new = datetime.date(2024, datetime.datetime.month, 24).strftime("%Y-%m")
 
         self.price_data = {}
@@ -217,3 +220,38 @@ class StatisticsLogic:
                 Sum('price'))
             self.price_data[f"{el['tag_name']}"] = test['price__sum']
         return self.price_data
+
+    @property
+    def statistic_for_period_of_time(self):
+        import datetime
+        tag_id_set = []
+        clean_data_set = {}
+        tag_id_model = WalletTag.objects.filter(
+            user=User.objects.filter(username=self.username).values()[0]['id']).values()
+        for el in (tag_id_model):
+            if el['tag_name'] not in tag_id_set:
+                tag_id_set.append(el)
+                clean_data_set[el['tag_name']] = 0
+
+        model_data = []
+        date_start = self.date_start
+        date_finish = self.date_finish
+        res = date_finish - date_start
+        date_pack = []
+        clean_data = {}
+        for el in range(1, res.days + 1):
+            dt = date_start + datetime.timedelta(days=el)
+            date_pack.append(dt)
+
+        for el in date_pack:
+            test = WalletData.objects.filter(user=self.username, date__icontains=el).values()
+            if len(test) != 0:
+                model_data.append(test)
+
+        for item in tag_id_set:
+            for elem in model_data:
+                if elem[0]['wallet_tag_id'] == item['id']:
+                    clean_data_set[f"{item['tag_name']}"] += int(elem[0]['price'])
+        data = {'model': clean_data_set}
+
+        return data
