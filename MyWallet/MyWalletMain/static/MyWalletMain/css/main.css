@@ -6,6 +6,8 @@ body {background-color: black}
                     justify-content: space-between;
 }
 
+
+
 .add_data_main{
                 border: 1px solid #fff;
                 padding: 1%;
@@ -84,6 +86,15 @@ body {background-color: black}
               width: 20%;
 }
 
+.chose_month {
+              width: 20%;
+              display: flex;
+              flex-direction: column;
+}
+.chose_month input{
+               margin-bottom:10px;
+}
+
 .value_and_btn {
                display: flex;
                flex-direction: row;
@@ -92,7 +103,7 @@ body {background-color: black}
 }
 
 .all_data_btn {
-               width: 50%;
+               width: 40%;
 }
 
 .all_data_btn button {

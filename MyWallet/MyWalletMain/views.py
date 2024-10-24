@@ -44,8 +44,17 @@ class MainPage(APIView):
         filter_by_tag_name = request.GET.get('filter_by_tag_name')
         filter_by_pre_tag_name = request.GET.get('filter_by_pre_tag_name')
         show_all = request.GET.get('show_all')
+        data_for_month = request.GET.get('data_for_month')
+
+        if data_for_month:
+            # order for chosen month
+            date = request.GET.get('month_date').split('-')
+            order_period_date = datetime.date(int(date[0]), int(date[1]), int(date[2])).strftime('%Y-%m')
+            data_set = DataSetMAinPage(username=username, chose_month=order_period_date)
+            return render(request, 'MyWalletMain/main_page.html', data_set.data_for_chosen_month)
 
         if show_all:
+            # all articles by current user
             logic = DataSetMAinPage(username=username)
             return render(request, 'MyWalletMain/main_page.html', logic.show_all_data)
 
@@ -145,7 +154,6 @@ class StatisticsPage(APIView):
             date_finish = datetime.date(int(request.GET.get('date_finish').split('-')[0]),
                                         int(request.GET.get('date_finish').split('-')[1]),
                                         int(request.GET.get('date_finish').split('-')[2]))
-
             logic = StatisticsLogic(username=username, date_start=date_start, date_finish=date_finish)
 
             return render(request, "MyWalletMain/statistics_page.html", logic.statistic_for_period_of_time)

@@ -77,6 +77,15 @@
                 <p class="text-light">total value:<span> {{sum.price__sum}}</span></p>
             </div>
         </div>
+        <div class="chose_month">
+            <form method="get">
+                {%csrf_token%}
+                <input class="form-control" type="date" name="month_date">
+                <button class="btn btn-success" type="submit" style="background-color:transparent"
+                        name="data_for_month" value="1">search
+                </button>
+            </form>
+        </div>
         <div class="all_data_btn">
             <form method="get">
                 <button class="btn btn-danger" style="background-color: transparent" name="show_all"

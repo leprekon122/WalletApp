@@ -4,16 +4,27 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
-
 class DataSetMAinPage:
     """class for creating data set"""
 
-    def __init__(self, tag_name=None, pre_tag_name=None, username=None):
+    def __init__(self, tag_name=None, pre_tag_name=None, username=None, chose_month=None):
         self.tag_name = tag_name
         self.pre_tag_name = pre_tag_name
         self.username = username
         self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
         self.month = datetime.now().strftime("%Y-%m")
+        self.chose_month = chose_month
+
+    @property
+    def data_for_chosen_month(self):
+        """data set for chosen month """
+        data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
+                'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
+                'data': WalletData.objects.filter(user=self.username, date__icontains=self.chose_month).values(),
+                'sum': WalletData.objects.filter(user=self.username, date__icontains=self.chose_month).values(
+                    'price').aggregate(Sum('price'))
+                }
+        return data
 
     @property
     def data_set(self):
