@@ -181,4 +181,23 @@ body {background-color: black}
                  border: 1px solid #fff;
                  border-radius: 5%;
     }
+    .value_and_btn {
+               display: flex;
+               flex-direction: column;
+               width: 100%;
+               justify-content: space-between;
+    }
+    .all_data_btn {
+                   width: 100%;
+    }
+    .chose_month {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+    }
+    .chose_month button{
+                       width:100%;
+                       margin-bottom: 15px;
+    }
+
 }
