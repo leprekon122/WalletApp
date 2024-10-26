@@ -111,17 +111,37 @@ body {background-color: black}
 }
 
 .stat_input {
-             width: 30%;
+             width: 90%;
              padding: 1%;
              border: 1px solid #fff;
              border-radius: 5%;
 }
 
 .stat_data {
-            width: 30%;
+            width: 90%;
             padding: 1%;
             border: 1px solid #fff;
             border-radius: 5%;
+    }
+.main_stat {
+            width: 100%;
+            display:flex;
+            flex-direction: row;
+    }
+.main_stat_data {
+                 width: 40%;
+                 display: flex;
+                 flex-direction: column;
+                 justify-content: start;
+}
+.stat_period_main {
+                   width: 100%;
+}
+.diagram_block {
+                width: 60%;
+                height: 70vh;
+                display: flex;
+                justify-content: center;
 }
 
 @media screen and (max-width: 430px){
@@ -200,4 +220,22 @@ body {background-color: black}
                        margin-bottom: 15px;
     }
 
+    .main_stat {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+    }
+
+    .main_stat_data {
+                 width: 100%;
+                 display: flex;
+                 flex-direction: column;}
+
+    .diagram_block {
+                width: 100%;
+                height: 85vh;
+
+        }
 }
+
+

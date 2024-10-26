@@ -3,36 +3,41 @@
 {%block title%}Statistics{%endblock%}
 
 {%block content%}
-<div class="container">
-    <div class="stat_period_main">
-        <form method="get">
-            {%csrf_token%}
-            <div class="stat_input">
-                <div class="start_from">
-                    <label for="start_from" class="text-light">start date</label>
-                    <input name="date_start" type="date" class="form-control " id="start_from">
+<div class="container-fluid main_stat">
+    <div class="main_stat_data">
+        <div class="stat_period_main">
+            <form method="get">
+                {%csrf_token%}
+                <div class="stat_input">
+                    <div class="start_from">
+                        <label for="start_from" class="text-light">start date</label>
+                        <input name="date_start" type="date" class="form-control " id="start_from">
+                    </div>
+                    <div class="finish_to">
+                        <label for="finish_date" class="text-light">finish date</label>
+                        <input name="date_finish" type="date" class="form-control" id="finish_date">
+                    </div>
+                    <br>
+                    <button type="submit" name="build_order" value="1" class="btn btn-success"
+                            style="background-color: transparent; width: 100%; border-radius: 5%">
+                        build
+                    </button>
                 </div>
-                <div class="finish_to">
-                    <label for="finish_date" class="text-light">finish date</label>
-                    <input name="date_finish" type="date" class="form-control" id="finish_date">
-                </div>
-                <br>
-                <button type="submit" name="build_order" value="1" class="btn btn-success"
-                        style="background-color: transparent; width: 100%; border-radius: 5%">
-                    build
-                </button>
-            </div>
-        </form>
-    </div>
-    <br>
+            </form>
+        </div>
+        <br>
 
-    <div class="stat_data">
-        {%for key, value in model.items %}
-        {%if value != None and value != 0%}
-        <p class="text-light">{{key}} - {{value}}</p>
-        {%endif%}
-        {%endfor%}
+        <div class="stat_data">
+            {%for key, value in model.items %}
+            {%if value != None and value != 0%}
+            <p class="text-light"><span class="keys">{{key}}</span> - <span class="values">{{value}}</span></p>
+            {%endif%}
+            {%endfor%}
+        </div>
     </div>
-
+    <div class="diagram_block">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>
+<script src="static/MyWalletMain/js/statistics.js"></script>
 {%endblock%}
