@@ -388,6 +388,59 @@ body {background-color: black}
     .diagram_block_full_screen {
                                 display: none;
     }
+    .main_note {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+    }
+    .left_side_main{
+                width: 100%;
+                margin-bottom: 3%;
+
+    }
+
+    .right_side {
+             width: 100%;
+             height: 60vh;
+             overflow: auto;
+
+    }
+
+    .notes_views {
+               width: 100%;
+               height: 15vh;
+               border: 1px solid #fff;
+               padding: 2%;
+               border-radius: 5%;
+               margin-bottom: 2%;
+
+    }
+
+    .create_note_block {
+                    width: 100%;
+                    border: 1px solid #fff;
+                    padding: 2%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: 30vh;
+
+    }
+
+    .create_note_block textarea{
+                                height: 15vh;
+    }
+
+    .note_date_and_btn {
+                    width: 92%;
+                    margin-left: 15px;
+
+
+    }
+
+
 }
 
 
