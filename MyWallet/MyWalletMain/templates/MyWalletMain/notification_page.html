@@ -1,0 +1,36 @@
+{%extends 'MyWalletMain/layout_main.html' %}
+
+{%block title%}Notification{%endblock%}
+
+{%block content%}
+<div class="container-fluid main_note">
+    <div class="left_side_main">
+        <form method="post">
+            {%csrf_token%}
+            <div class="create_note_block">
+                <textarea class="form-control note_text" name="text_note"></textarea>
+                <div class="note_date_and_btn">
+                    <input type="date" class="form-control" name="note_date">
+                    <button class="btn btn-success" style="background: transparent" type="submit" name="create_note"
+                            value="1">
+                        create
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="right_side">
+        {%for el in model%}
+        <div class="notes_views">
+            <div class="notes_text">
+                <p class="text-light">{{el.note_text}}</p>
+            </div>
+            <div class="notes_dates">
+                <p class="text-light">{{el.note_date}}</p>
+                <p class="text-light">{{el.alarm_date}}</p>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+{%endblock%}

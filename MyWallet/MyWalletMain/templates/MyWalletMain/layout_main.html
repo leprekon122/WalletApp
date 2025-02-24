@@ -1,6 +1,6 @@
 {%load static%}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,24 +29,38 @@
             crossorigin="anonymous"></script>
 </head>
 <nav class="navbar navbar-expand-lg" style="background-color: transparent">
-  <img src="static/MyWalletMain/img/My_Wallet.png" width="35px" height="35px">
-  <button class="navbar-toggler text-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon text-dark"><i class="fa-solid fa-bars text-light"></i></span>
-  </button>
-  <div class="collapse navbar-collapse text-light" id="navbarNav">
-    <ul class="navbar-nav text-light">
-      <li class="nav-item active">
-        <a class="nav-link text-light" href="{% url 'main_page' %}">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-light" href="{% url 'statistics_page' %}">Statistics</a>
-      </li>
-      <li class="nav-item diagram_btn" id="diagram_btn" style="border-top: 1.5px solid #29a125;">
-        <a class="nav-link text-light"  rel="" onclick="show_hide_diagram_block()">Diagrams</a>
-      </li>
-    </ul>
-  </div>
+    <img src="static/MyWalletMain/img/My_Wallet.png" width="35px" height="35px">
+    <button class="navbar-toggler text-light" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon text-dark"><i class="fa-solid fa-bars text-light"></i></span>
+    </button>
+    <div class="collapse navbar-collapse text-light" id="navbarNav">
+        <ul class="navbar-nav text-light">
+            <li class="nav-item active">
+                <a class="nav-link " href="{% url 'main_page' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'statistics_page' %}">Statistics</a>
+            </li>
+            <li class="nav-item diagram_btn" id="diagram_btn" style="border-top: 1.5px solid #29a125;">
+                <a class="nav-link " rel="" onclick="show_hide_diagram_block()">Diagrams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'notification_page' %}">Notification</a>
+            </li>
+        </ul>
+        <div class="warning_bells">
+            <form method="get" action="{% url 'notification_page' %}">
+                <button class="btn btn-success" style="border:none; background: transparent" type="submit" name="warn_bells_btn" value="1"><i
+                        class="fa-regular fa-bell text-warning"></i></button>
+            </form>
+            <div class="count_circle">
+                <p>{{num_of_notes}}</p>
+            </div>
+        </div>
+    </div>
 </nav>
+
 <body>
 {%block content%}
 {%endblock%}

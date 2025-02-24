@@ -1,4 +1,6 @@
 var count = 0
+
+
 // function for diagram on statistics page
 function round_diagram(){
      // get all tag_name  form stat_page
@@ -68,7 +70,7 @@ function round_diagram_full_screen(){
      }
 
      const ctx = document.getElementById('myChart_full_screen');
-      new Chart(ctx, {
+      let myChartFull = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels: keys_set,
@@ -121,3 +123,4 @@ function show_hide_diagram_block(){
         document.getElementById('diagram_main_block').style.right = '2000px';
     }
 }
+

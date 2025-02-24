@@ -4,13 +4,11 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 
-from .models import WalletData, WalletTag
+from .models import WalletData, WalletTag, NotificationModel
 from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData, StatisticsLogic, \
-    DeleteArticles
+    DeleteArticles, MainNotes
 from rest_framework.views import APIView
 from rest_framework import permissions
-from django.db.models import Sum
-from django.db.models import Q
 
 
 # Create your views here.
@@ -135,7 +133,7 @@ class StatisticsPage(APIView):
         build_order = request.GET.get('build_order')
         username = request.user
         logic = StatisticsLogic(username=username).current_month_statistics
-
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         if build_order:
 
             tag_id_set = []
@@ -158,5 +156,32 @@ class StatisticsPage(APIView):
 
             return render(request, "MyWalletMain/statistics_page.html", logic.statistic_for_period_of_time)
 
-        data = {'model': logic}
+        data = {'model': logic,
+                'num_of_notes': num_of_notes
+                }
+
         return render(request, "MyWalletMain/statistics_page.html", data)
+
+
+class NotificationPage(APIView):
+    """class for render notification page"""
+
+    @staticmethod
+    def get(request):
+        warn_bells_btn = request.GET.get('warn_bells_btn')
+        logic = DataSetMAinPage(username=request.user).data_set_for_notification_page
+        if warn_bells_btn:
+            logic = DataSetMAinPage(username=request.user).data_set_for_alarm_bells
+            return render(request, 'MyWalletMain/notification_page.html', logic)
+        return render(request, 'MyWalletMain/notification_page.html', logic)
+
+    @staticmethod
+    def post(request):
+        logic = DataSetMAinPage(username=request.user).data_set_for_notification_page
+        create_note = request.POST.get('create_note')
+        if create_note:
+            text_note = request.POST.get('text_note')
+            note_date = request.POST.get('note_date')
+            main_notes_logic = MainNotes(username=request.user, text_note=text_note, note_date=note_date).create_notes
+            return render(request, 'MyWalletMain/notification_page.html', logic)
+        return render(request, 'MyWalletMain/notification_page.html', logic)

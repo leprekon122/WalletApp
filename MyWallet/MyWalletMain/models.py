@@ -34,3 +34,15 @@ class WalletData(models.Model):
     class Meta:
         verbose_name = 'WalletData'
         verbose_name_plural = 'WalletData'
+
+
+class NotificationModel(models.Model):
+    objects = None
+    username = models.ForeignKey(User, models.CASCADE)
+    note_text = models.TextField()
+    note_date = models.DateField(auto_now=True)
+    alarm_date = models.DateField()
+
+    class Meta:
+        verbose_name = 'NotificationModel'
+        verbose_name_plural = 'NotificationModel'

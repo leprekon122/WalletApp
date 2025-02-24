@@ -1,7 +1,8 @@
-from .models import PreTag, WalletTag, WalletData
+from .models import PreTag, WalletTag, WalletData, NotificationModel
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from datetime import datetime
+import datetime
 
 
 class DataSetMAinPage:
@@ -12,64 +13,91 @@ class DataSetMAinPage:
         self.pre_tag_name = pre_tag_name
         self.username = username
         self.get_user_id = User.objects.filter(username=self.username).values('id')[0]['id']
-        self.month = datetime.now().strftime("%Y-%m")
+        self.month = datetime.datetime.now().strftime("%Y-%m")
         self.chose_month = chose_month
 
     @property
     def data_for_chosen_month(self):
         """data set for chosen month """
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
                 'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
                 'data': WalletData.objects.filter(user=self.username, date__icontains=self.chose_month).values(),
                 'sum': WalletData.objects.filter(user=self.username, date__icontains=self.chose_month).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
                 }
         return data
 
     @property
     def data_set(self):
         """main_data set """
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
                 'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
                 'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(),
                 'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
                 }
         return data
 
     @property
     def filter_by_increasing_date(self):
         """data_set after make increase date filter"""
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
                     '-date'),
                 'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
                 }
         return data
 
     @property
     def filter_by_increasing_price(self):
         """data_set after make increase price filter"""
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
                     '-price'),
                 'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
+                }
+        return data
+
+    @property
+    def data_set_for_notification_page(self):
+        """funct for creating data set in notification page"""
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
+        data = {'model': NotificationModel.objects.values(),
+                'num_of_notes': num_of_notes
+                }
+        return data
+
+    @property
+    def data_set_for_alarm_bells(self):
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
+        data = {'model': NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values(),
+                'num_of_notes': num_of_notes
                 }
         return data
 
     @property
     def filter_by_decreasing_price(self):
         """data_set after make decrease price filter"""
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.all().values(),
                 'tag': WalletTag.objects.all().values(),
                 'data': WalletData.objects.filter(user=self.username, date__icontains=self.month).values().order_by(
                     'price'),
                 'sum': WalletData.objects.filter(user=self.username, date__icontains=self.month).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
                 }
         return data
 
@@ -119,11 +147,13 @@ class DataSetMAinPage:
     @property
     def show_all_data(self):
         """filter for view all data"""
+        num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
         data = {'pre_tag': PreTag.objects.filter(user_id=self.get_user_id).values(),
                 'tag': WalletTag.objects.filter(user_id=self.get_user_id).values(),
                 'data': WalletData.objects.filter(user=self.username).values(),
                 'sum': WalletData.objects.filter(user=self.username).values(
-                    'price').aggregate(Sum('price'))
+                    'price').aggregate(Sum('price')),
+                'num_of_notes': num_of_notes
                 }
         return data
 
@@ -213,7 +243,7 @@ class StatisticsLogic:
 
     def __init__(self, username, date_start=None, date_finish=None):
         self.model = WalletTag.objects.all().values()
-        self.month = datetime.now().strftime("%Y-%m")
+        self.month = datetime.datetime.now().strftime("%Y-%m")
         self.date_start = date_start
         self.date_finish = date_finish
         # self.month_new = datetime.date(2024, datetime.datetime.month, 24).strftime("%Y-%m")
@@ -266,3 +296,18 @@ class StatisticsLogic:
         data = {'model': clean_data_set}
 
         return data
+
+
+class MainNotes:
+    """Clss for cmenaging on Notes page"""
+
+    def __init__(self, username, text_note, note_date):
+        self.username = username
+        self.text_note = text_note
+        self.note_date = note_date
+
+    @property
+    def create_notes(self):
+        """func for creatin new notes in notes page"""
+        NotificationModel.objects.create(username=self.username, note_text=self.text_note, alarm_date=self.note_date)
+        pass
