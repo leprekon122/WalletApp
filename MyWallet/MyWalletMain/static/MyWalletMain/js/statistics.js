@@ -113,8 +113,16 @@ function diagram_btn(){
 }
 diagram_btn()
 
+function hide_console(){
+    let screen_width = screen.width
+    if (screen_width > 420){
+        document.getElementById('diagram_main_block').style.display = 'none'
+    }
+}
+hide_console()
 //show hide diagram block
 function show_hide_diagram_block(){
+
     count += 1;
     if(count % 2 == 1){
         document.getElementById('diagram_main_block').style.right = '0px';

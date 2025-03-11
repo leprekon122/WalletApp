@@ -23,10 +23,43 @@
                         build
                     </button>
                 </div>
+                <br>
+                {%if stat_flag == 0 %}
+                <div class="stat_input">
+                    <input class="info_ByTag_and_month_date form-control" type="date" name="month_and_tag">
+                    <br>
+                    <select class="form-control" name="tag">
+                        {%for el in model%}
+                        <option>{{el}}</option>
+                        {%endfor%}
+                    </select>
+                    <br>
+                    <button class="btn btn-success" name="tag_and_date" value="1" type="submit"
+                            style="background: transparent; width: 100%;">submit
+                    </button>
+                </div>
+                {%else%}
+                <div class="stat_input">
+                    <input class="info_ByTag_and_month_date form-control" type="date" name="month_and_tag">
+                    <br>
+                    <select class="form-control" name="tag">
+                        {%for el in tag_list%}
+                        <option>{{el}}</option>
+                        {%endfor%}
+                    </select>
+                    <br>
+                    <button class="btn btn-success" name="tag_and_date" value="1" type="submit"
+                            style="background: transparent; width: 100%;">submit
+                    </button>
+                </div>
+                {%endif%}
             </form>
         </div>
+    </div>
+    <div class="diagram_block_full_screen">
+        <canvas id="myChart_full_screen"></canvas>
         <br>
-
+        {% if stat_flag == 0%}
         <div class="stat_data">
             {%for key, value in model.items %}
             {%if value != None and value != 0%}
@@ -34,13 +67,31 @@
             {%endif%}
             {%endfor%}
         </div>
-    </div>
-    <div class="diagram_block_full_screen">
-        <canvas id="myChart_full_screen"></canvas>
+        {%else%}
+        <div class="stat_data">
+            <p class="text-light"><span class="keys">{{tag_name}}</span> - <span
+                    class="values">{{tag_sum}}</span></p>
+        </div>
+        {%endif%}
     </div>
     <div class="diagram_main_block" id="diagram_main_block">
         <div class="diagram_block">
             <canvas id="myChart"></canvas>
+            <br>
+            {% if stat_flag == 0%}
+            <div class="stat_data_!">
+                {%for key, value in model.items %}
+                {%if value != None and value != 0%}
+                <p class="text-light"><span class="keys">{{key}}</span> - <span class="values">{{value}}</span></p>
+                {%endif%}
+                {%endfor%}
+            </div>
+            {%else%}
+            <div class="stat_data">
+                <p class="text-light"><span class="keys">{{tag_name}}</span> - <span
+                        class="values">{{tag_sum}}</span></p>
+            </div>
+            {%endif%}
         </div>
     </div>
 </div>

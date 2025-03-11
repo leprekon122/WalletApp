@@ -241,11 +241,13 @@ class DeleteArticles:
 class StatisticsLogic:
     """class for statistics page logic"""
 
-    def __init__(self, username, date_start=None, date_finish=None):
+    def __init__(self, username, date_start=None, date_finish=None, tag_name=None, date_month=None):
         self.model = WalletTag.objects.all().values()
         self.month = datetime.datetime.now().strftime("%Y-%m")
+        self.date_month = date_month
         self.date_start = date_start
         self.date_finish = date_finish
+        self.tag_name = tag_name
         # self.month_new = datetime.date(2024, datetime.datetime.month, 24).strftime("%Y-%m")
 
         self.price_data = {}
@@ -261,6 +263,22 @@ class StatisticsLogic:
                 Sum('price'))
             self.price_data[f"{el['tag_name']}"] = test['price__sum']
         return self.price_data
+
+    @property
+    def statistic_for_month_by_tag(self):
+        """func for making requst by chosen month and tag"""
+
+        data = {'tag_sum': WalletData.objects.filter(user=self.username,
+                                                     date__icontains=f"{self.date_month[0]}-{self.date_month[1]}",
+                                                     wallet_tag_id=self.tag_name).aggregate(Sum('price'))['price__sum'],
+                'model': WalletData.objects.filter(user=self.username,
+                                                   date__icontains=f"{self.date_month[0]}-{self.date_month[1]}",
+                                                   wallet_tag_id=self.tag_name).values(),
+                'tag_name': WalletTag.objects.filter(id=self.tag_name).values('tag_name')[0]['tag_name'],
+                'stat_flag': 1
+                }
+
+        return data
 
     @property
     def statistic_for_period_of_time(self):

@@ -131,9 +131,23 @@ class StatisticsPage(APIView):
     @staticmethod
     def get(request):
         build_order = request.GET.get('build_order')
+        tag_and_date = request.GET.get('tag_and_date')
         username = request.user
         logic = StatisticsLogic(username=username).current_month_statistics
         num_of_notes = len(NotificationModel.objects.filter(alarm_date__icontains=datetime.date.today()).values())
+
+        if tag_and_date:
+            date = request.GET.get('month_and_tag').split('-')
+            tag_id = request.GET.get('tag')
+            wallet_tag_id = WalletTag.objects.filter(tag_name=tag_id).values('id')[0]['id']
+            model = WalletData.objects.filter(date__icontains=f"{date[0]}-{date[1]}",
+                                              wallet_tag_id=wallet_tag_id).values()
+            logic = StatisticsLogic(username=request.user, tag_name=wallet_tag_id,
+                                    date_month=date).statistic_for_month_by_tag
+            logic['num_of_notes'] = num_of_notes
+            logic['tag_list'] = StatisticsLogic(username=username).current_month_statistics
+
+            return render(request, "MyWalletMain/statistics_page.html", logic)
         if build_order:
 
             tag_id_set = []
@@ -154,10 +168,9 @@ class StatisticsPage(APIView):
                                         int(request.GET.get('date_finish').split('-')[2]))
             logic = StatisticsLogic(username=username, date_start=date_start, date_finish=date_finish)
 
-            return render(request, "MyWalletMain/statistics_page.html", logic.statistic_for_period_of_time)
-
         data = {'model': logic,
-                'num_of_notes': num_of_notes
+                'num_of_notes': num_of_notes,
+                'stat_flag': 0,
                 }
 
         return render(request, "MyWalletMain/statistics_page.html", data)
