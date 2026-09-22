@@ -179,6 +179,8 @@ class StatisticsPage(APIView):
 class NotificationPage(APIView):
     """class for render notification page"""
 
+    permission_classes = [permissions.IsAuthenticated]
+
     @staticmethod
     def get(request):
         warn_bells_btn = request.GET.get('warn_bells_btn')
