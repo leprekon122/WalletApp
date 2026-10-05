@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 
 from .models import WalletData, WalletTag, NotificationModel
 from .views_logic import DataSetMAinPage, CreateTag, CreatePreTag, CreateWalletArticles, RewriteData, StatisticsLogic, \
-    DeleteArticles, MainNotes
+    DeleteArticles, MainNotes, ModificationPageData
 from rest_framework.views import APIView
 from rest_framework import permissions
 
@@ -200,3 +200,27 @@ class NotificationPage(APIView):
             main_notes_logic = MainNotes(username=request.user, text_note=text_note, note_date=note_date).create_notes
             return render(request, 'MyWalletMain/notification_page.html', logic)
         return render(request, 'MyWalletMain/notification_page.html', logic)
+
+
+class ModificationPanel(APIView):
+    """Page for deleting tags and pre-tags"""
+
+    def get(self, request):
+        """function for rendering get req"""
+        logic = ModificationPageData().create_main_data_set()
+        return render(request, 'MyWalletMain/modification_page.html', logic)
+
+    def post(self, request):
+        """function for rendering post req"""
+
+        logic = ModificationPageData().create_main_data_set()
+        delete_tag = request.POST.get('delete_tag')
+        delete_pre_tag = request.POST.get('delete_pre_tag')
+
+        if delete_tag:
+            ModificationPageData(notice_id=delete_tag).delete_tag()
+
+        if delete_pre_tag:
+            ModificationPageData(notice_id=delete_pre_tag).delete_pre_tag()
+
+        return render(request, 'MyWalletMain/modification_page.html', logic)

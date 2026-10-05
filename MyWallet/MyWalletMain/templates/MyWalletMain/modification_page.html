@@ -1,0 +1,47 @@
+{%extends 'MyWalletMain/layout_main.html'%}
+
+{%block title%}Modification page{%endblock%}
+
+{%block content%}
+<div class="modification-container">
+
+    <form method="post">
+        {%csrf_token%}
+        <div class="all_tags">
+
+            <div class="tag_note">
+                <div class="tag_title">
+                    <h5>All tags</h5>
+                </div>
+                {%for el in model_tag%}
+                <br>
+                <div style="display: flex; flex-direction-column; border-bottom: .4px solid yellow; justify-content: space-around;">
+                    {{el.tag_name}}
+                    <button class="btn btn-danger" style="color: red; background-color: transparent; border: none"
+                            name="delete_tag" value="{{el.id}}" type="submit">delete tag
+                    </button>
+                </div>
+                {%endfor%}
+            </div>
+
+            <div class="all_pre_tags">
+                <div class="pre_tag_tittle">
+                    <h5>All pre-tag</h5>
+                </div>
+                {%for el in model_pre_tag%}
+                <br>
+                <div style="display: flex; flex-direction-column; border-bottom: .4px solid yellow; justify-content: space-around;">
+                    {{el.pre_tag_name}}
+                    <button class="btn btn-danger" style="color: red; background-color: transparent; border: none"
+                            name="delete_pre_tag" value="{{el.id}}">
+                        delete
+                        tag
+                    </button>
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </form>
+
+</div>
+{%endblock%}

@@ -3,7 +3,7 @@
 {%block title%}My Wallet{%endblock%}
 
 {%block content%}
-<div class="container">
+<div class="container_main">
     <div class="add_data_and_tags">
         <div class="add_data_main">
             <form method="post">
@@ -175,6 +175,7 @@
                                             name="filter_by_tag_name" value="{{item.id}}">
                                         {{item.tag_name}}
                                     </button>
+                                    <button class="btn"></button>
                                     {%endfor%}
                                 </form>
                             </div>

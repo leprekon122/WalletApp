@@ -9,7 +9,8 @@ urlpatterns = [
    path('', views.login_page, name='login_page'),
    path('main_page', views.MainPage.as_view(), name='main_page'),
    path('statistics', views.StatisticsPage.as_view(), name="statistics_page"),
-   path('notification', views.NotificationPage.as_view(), name='notification_page')
+   path('notification', views.NotificationPage.as_view(), name='notification_page'),
+   path('modification', views.ModificationPanel.as_view(), name='modification_page')
 
 ]
 

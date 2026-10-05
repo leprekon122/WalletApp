@@ -329,3 +329,33 @@ class MainNotes:
         """func for creatin new notes in notes page"""
         NotificationModel.objects.create(username=self.username, note_text=self.text_note, alarm_date=self.note_date)
         pass
+
+
+class ModificationPageData:
+    """class for return data on Modification page"""
+
+    def __init__(self, notice_id=None):
+        self.notice_id = notice_id
+
+    def return_tags(self):
+        """create data from tags model"""
+        model_tag = WalletTag.objects.values()
+        return model_tag
+
+    def delete_tag(self):
+        WalletTag.objects.filter(id=self.notice_id).delete()
+
+    def return_pre_tags(self):
+        """create data from pre_tags model"""
+        model_pre_tag = PreTag.objects.values()
+        return model_pre_tag
+
+    def delete_pre_tag(self):
+        PreTag.objects.filter(id=self.notice_id).delete()
+
+    def create_main_data_set(self):
+        """create dataset"""
+        data = {'model_tag': self.return_tags(),
+                'model_pre_tag': self.return_pre_tags()
+                }
+        return data

@@ -69,9 +69,9 @@ WSGI_APPLICATION = 'MyWallet.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('name'),
-        'USER': os.getenv('user'),
-        'PASSWORD': os.getenv('password'),
+        'NAME': os.getenv('name_local'),
+        'USER': os.getenv('user_local'),
+        'PASSWORD': os.getenv('password_local'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
